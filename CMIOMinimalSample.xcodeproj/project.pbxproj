@@ -308,7 +308,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 62G85M9ZN5;
+				DEVELOPMENT_TEAM = JVYHG2PPZ8;
 				INFOPLIST_FILE = CMIOMinimalSample/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnboiles.CMIOMinimalSample;
@@ -323,7 +323,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 62G85M9ZN5;
+				DEVELOPMENT_TEAM = JVYHG2PPZ8;
 				INFOPLIST_FILE = CMIOMinimalSample/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnboiles.CMIOMinimalSample;

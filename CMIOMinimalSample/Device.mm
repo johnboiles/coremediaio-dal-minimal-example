@@ -212,6 +212,16 @@
             *dataUsed = sizeof(pid_t);
             break;
             
+        case kCMIODevicePropertyDeviceMaster:
+            *static_cast<pid_t*>(data) = -1;
+            *dataUsed = sizeof(pid_t);
+            break;
+            
+        case kCMIODevicePropertyClientSyncDiscontinuity:
+            *static_cast<Boolean*>(data) = false;
+            *dataUsed = sizeof(Boolean);
+            break;
+            
         case kCMIODevicePropertyLatency:
             *static_cast<UInt32*>(data) = 0;
             *dataUsed = sizeof(UInt32);
@@ -264,6 +274,8 @@
         case kCMIODevicePropertyDeviceIsRunningSomewhere:
         case kCMIODevicePropertyDeviceCanBeDefaultDevice:
         case kCMIODevicePropertyHogMode:
+        case kCMIODevicePropertyDeviceMaster:
+        case kCMIODevicePropertyClientSyncDiscontinuity:
         case kCMIODevicePropertyLatency:
         case kCMIODevicePropertyStreams:
         case kCMIODevicePropertyStreamConfiguration:
@@ -271,6 +283,7 @@
         case kCMIODevicePropertyCanProcessAVCCommand:
         case kCMIODevicePropertyCanProcessRS422Command:
             return true;
+        case kCMIODevicePropertyLinkedAndSyncedCoreAudioDeviceUID:
         case kCMIODevicePropertyLinkedCoreAudioDeviceUID:
             return false;
         default:

@@ -161,17 +161,52 @@
             *dataUsed = sizeof(CFStringRef);
             break;
         case kCMIOObjectPropertyManufacturer:
-        case kCMIOObjectPropertyElementCategoryName:
-        case kCMIOObjectPropertyElementNumberName:
+            *static_cast<CFStringRef*>(data) = CFSTR("johnboiles (& gxalpha) (Mostly joinboiles tho)");
+            *dataUsed = sizeof(CFStringRef);
+            break;
         case kCMIOStreamPropertyTerminalType:
+            *static_cast<UInt32*>(data) = 512;
+            *dataUsed = sizeof(UInt32);
+            break;
         case kCMIOStreamPropertyStartingChannel:
+            *static_cast<UInt32*>(data) = 1;
+            *dataUsed = sizeof(UInt32);
+            break;
         case kCMIOStreamPropertyLatency:
-        case kCMIOStreamPropertyInitialPresentationTimeStampForLinkedAndSyncedAudio:
+            *static_cast<UInt32*>(data) = 6;
+            *dataUsed = sizeof(UInt32);
+            break;
         case kCMIOStreamPropertyOutputBuffersNeededForThrottledPlayback:
+            *static_cast<UInt32*>(data) = 6;
+            *dataUsed = sizeof(UInt32);
+            break;
+        case kCMIOObjectPropertyElementCategoryName:
+            *static_cast<CFStringRef*>(data) = CFSTR("\"A CFString that contains a human readable name for the category of the given element in the given scope.\" ?? wtf");
+            *dataUsed = sizeof(CFStringRef);
+            break;
+        case kCMIOObjectPropertyElementNumberName:
+            *static_cast<CFStringRef*>(data) = CFSTR("Look here: CMIOHardwareObject.h");
+            *dataUsed = sizeof(CFStringRef);
+            break;
+        case kCMIOStreamPropertyInitialPresentationTimeStampForLinkedAndSyncedAudio:
             DLog(@"TODO: %@", [ObjectStore StringFromPropertySelector:address.mSelector]);
             break;
         case kCMIOStreamPropertyDirection:
             *static_cast<UInt32*>(data) = 1;
+            *dataUsed = sizeof(UInt32);
+            break;
+            
+            //Those added by me (gxalpha)
+        case kCMIOStreamPropertyNoDataTimeoutInMSec:
+            *static_cast<UInt32*>(data) = 250;
+            *dataUsed = sizeof(UInt32);
+            break;
+        case kCMIOStreamPropertyDeviceSyncTimeoutInMSec:
+            *static_cast<UInt32*>(data) = 0;
+            *dataUsed = sizeof(UInt32);
+            break;
+        case kCMIOStreamPropertyNoDataEventCount:
+            *static_cast<UInt32*>(data) = 0;
             *dataUsed = sizeof(UInt32);
             break;
         default:
@@ -183,18 +218,33 @@
     switch (address.mSelector){
         case kCMIOObjectPropertyName:
         case kCMIOObjectPropertyElementName:
-            return true;
         case kCMIOObjectPropertyManufacturer:
-        case kCMIOObjectPropertyElementCategoryName:
-        case kCMIOObjectPropertyElementNumberName:
         case kCMIOStreamPropertyDirection:
         case kCMIOStreamPropertyTerminalType:
         case kCMIOStreamPropertyStartingChannel:
         case kCMIOStreamPropertyLatency:
-        case kCMIOStreamPropertyInitialPresentationTimeStampForLinkedAndSyncedAudio:
         case kCMIOStreamPropertyOutputBuffersNeededForThrottledPlayback:
+        case kCMIOObjectPropertyElementCategoryName:
+        case kCMIOObjectPropertyElementNumberName:
+            return true;
+        case kCMIOStreamPropertyInitialPresentationTimeStampForLinkedAndSyncedAudio://Throws an error, seems to not be needed tho as the apple code does the same
+            return true;
+        
+            //Those added by me (gxalpha)
+        case kCMIOStreamPropertyNoDataTimeoutInMSec:
+        case kCMIOStreamPropertyDeviceSyncTimeoutInMSec:
+        case kCMIOStreamPropertyNoDataEventCount:
+            return true;
+            
+        case kCMIOStreamPropertyFrameRate:
+        case kCMIOStreamPropertyFrameRates:
+            return true;
+            
+            
+            //Uhhmm
             DLog(@"TODO: %@", [ObjectStore StringFromPropertySelector:address.mSelector]);
             return false;
+            
         default:
             DLog(@"Stream unhandled hasPropertyWithAddress for %@", [ObjectStore StringFromPropertySelector:address.mSelector]);
             return false;
@@ -202,6 +252,7 @@
 }
 
 - (BOOL)isPropertySettableWithAddress:(CMIOObjectPropertyAddress)address {
+    //This is everything with text, right?
     DLog(@"Stream unhandled isPropertySettableWithAddress for %@", [ObjectStore StringFromPropertySelector:address.mSelector]);
     return false;
 }
