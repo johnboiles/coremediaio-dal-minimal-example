@@ -43,8 +43,7 @@
 
 @implementation Stream
 
-#define FPS 30
-#define FPS_FLOAT 30.0
+#define FPS 30.0
 
 - (instancetype _Nonnull)init {
     self = [super init];
@@ -180,7 +179,7 @@
     // Instead, we start our presentation times from zero (using the sequence number as a base), and use a scale that's
     // a multiple of our framerate. This has been observed in parts of AVFoundation and lets us be frame-accurate even
     // on non-round framerates (i.e., we can use a scale of 2997 for 29,97 fps content if we want to).
-    CMTimeScale scale = FPS * 10;
+    CMTimeScale scale = FPS * 100;
     CMTime frameDuration = CMTimeMake(scale / FPS, scale);
     CMTime pts = CMTimeMake(frameDuration.value * self.sequenceNumber, scale);
     CMSampleTimingInfo timing;
@@ -316,11 +315,11 @@
             break;
         case kCMIOStreamPropertyFrameRate:
         case kCMIOStreamPropertyFrameRates:
-            *static_cast<Float64*>(data) = FPS_FLOAT;
+            *static_cast<Float64*>(data) = FPS;
             *dataUsed = sizeof(Float64);
             break;
         case kCMIOStreamPropertyMinimumFrameRate:
-            *static_cast<Float64*>(data) = FPS_FLOAT;
+            *static_cast<Float64*>(data) = FPS;
             *dataUsed = sizeof(Float64);
             break;
         case kCMIOStreamPropertyClock:
