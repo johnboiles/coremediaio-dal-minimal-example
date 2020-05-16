@@ -4,6 +4,12 @@ This example project is intended to present the simplest possible implementation
 
 The goal is for this plugin to serve static frames as a virtual webcam to host software (QuickTime, OBS, Chrome, etc)
 
+## Donating 💸
+
+If this code is useful to you, feel free to send some cash my way to fund coffee for more late night endeavors like this! I definitely sacrificed sleep several nights to get this thing to work since Apple's docs & sample code are so bad for these APIs. Feel free to [Buy Me a Coffee](https://www.buymeacoffee.com/johnboiles) or [PayPal me](https://paypal.me/johnboiles).
+
+<a href="https://www.buymeacoffee.com/johnboiles" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 ## Other Examples
 
 Other projects that have implemented a DAL plugin are probably going to give the most insight as to what is missing here.
