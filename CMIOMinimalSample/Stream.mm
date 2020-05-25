@@ -30,6 +30,7 @@
     CFTypeRef _clock;
     NSImage *_testImage;
     dispatch_source_t _frameDispatchSource;
+    uint64_t _firstFrameDeliveryTime;
 }
 
 @property CMIODeviceStreamQueueAlteredProc alteredProc;
@@ -48,6 +49,7 @@
 - (instancetype _Nonnull)init {
     self = [super init];
     if (self) {
+        _firstFrameDeliveryTime = 0;
         _frameDispatchSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,
                                                      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
 
@@ -79,6 +81,7 @@
 
 - (void)stopServingFrames {
     dispatch_suspend(_frameDispatchSource);
+    _firstFrameDeliveryTime = 0;
 }
 
 - (CMSimpleQueueRef)queue {
@@ -173,20 +176,33 @@
 
     // The timing here is quite important. For frames to be delivered correctly and successfully be recorded by apps
     // like QuickTime Player, we need to be accurate in both our timestamps _and_ have a sensible scale. Using large
-    // timestamps and scales like mach_absolute_time() and NSEC_PER_SEC will work for display, but will error out
+    // scales like NSEC_PER_SEC combined with a mach_absolute_time() value will work for display, but will error out
     // when trying to record.
     //
     // Instead, we start our presentation times from zero (using the sequence number as a base), and use a scale that's
     // a multiple of our framerate. This has been observed in parts of AVFoundation and lets us be frame-accurate even
     // on non-round framerates (i.e., we can use a scale of 2997 for 29,97 fps content if we want to).
+    //
+    // It's also been observed that we do seem to need a mach_absolute_time()-based value for presentation times in
+    // order to get reliable output and recording. Since we don't want to just call mach_absolute_time() on every
+    // frame (otherwise recorded output from this plugin will have frame timing based on the scheduling of our timer,
+    // which isn't guaranteed to be accurate), we record the system's absolute time on our first frame, then calculate
+    // a delta from these for subsequent frames. This keeps presentation times accurate even if our timer isn't.
+    if (_firstFrameDeliveryTime == 0) {
+        _firstFrameDeliveryTime = mach_absolute_time();
+    }
+
     CMTimeScale scale = FPS * 100;
+    CMTime firstFrameTime = CMTimeMake((_firstFrameDeliveryTime / (CFTimeInterval)NSEC_PER_SEC) * scale, scale);
     CMTime frameDuration = CMTimeMake(scale / FPS, scale);
-    CMTime pts = CMTimeMake(frameDuration.value * self.sequenceNumber, scale);
+    CMTime framesSinceBeginning = CMTimeMake(frameDuration.value * self.sequenceNumber, scale);
+    CMTime presentationTime = CMTimeAdd(firstFrameTime, framesSinceBeginning);
+
     CMSampleTimingInfo timing;
     timing.duration = frameDuration;
-    timing.presentationTimeStamp = pts;
-    timing.decodeTimeStamp = pts;
-    OSStatus err = CMIOStreamClockPostTimingEvent(pts, mach_absolute_time(), true, self.clock);
+    timing.presentationTimeStamp = presentationTime;
+    timing.decodeTimeStamp = presentationTime;
+    OSStatus err = CMIOStreamClockPostTimingEvent(presentationTime, mach_absolute_time(), true, self.clock);
     if (err != noErr) {
         DLog(@"CMIOStreamClockPostTimingEvent err %d", err);
     }
