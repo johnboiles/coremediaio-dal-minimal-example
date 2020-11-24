@@ -7,7 +7,7 @@
 //  CMIOMinimalSample is free software, and use is bound by the terms
 //  set out in the LICENSE file distributed with this project.
 
-#import <CoreMediaIO/CMIOHardwarePlugin.h>
+#import <CoreMediaIO/CMIOHardwarePlugIn.h>
 
 #import "PlugInInterface.h"
 #import "Logging.h"

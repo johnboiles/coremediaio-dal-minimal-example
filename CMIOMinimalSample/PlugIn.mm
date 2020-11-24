@@ -9,7 +9,7 @@
 
 #import "PlugIn.h"
 
-#import <CoreMediaIO/CMIOHardwarePlugin.h>
+#import <CoreMediaIO/CMIOHardwarePlugIn.h>
 
 #import "Logging.h"
 
