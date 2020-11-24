@@ -38,6 +38,10 @@ You may also need to change the codesigning to use your own personal developer i
 
 Also take a look at [Cameo](https://github.com/lvsti/Cameo) by @lvsti. It allows you to inspect DAL plugins and see all their properties at a glance. It was very useful to me to take a known-working plugin (like [lvsti/CoreMediaIO-DAL-Example](https://github.com/lvsti/CoreMediaIO-DAL-Example) and [Snap Camera](https://snapcamera.snapchat.com/)) and then use Cameo to understand the differences between those plugins and this plugin.
 
+## Before Shipping Code
+
+Before you bundle this code into your software, you should change the class names to something unique! Objective-C doesn't have namespaces and so if you keep the classes named `Stream`, `Device`, `ObjectStore`, `PlugIn` etc your plugin may not work if you use it along with someone else's plugin who also didn't change the names. This can cause [real bugs](https://github.com/johnboiles/obs-mac-virtualcam/issues/232) where your plugin won't work if someone else's plugin is installed. Typically in Objective-C you add a few letters to the front of your classes to make them unique (e.g. `JBStream`, `JBDevice`, `JBObjectStore`, `JBPlugin`).
+
 ## License ⚖️
 
 This software is licensed as MIT. Do what you want with it! But please, if you find ways to improve this software, or you find bugs, please open a [Pull Request](https://github.com/johnboiles/coremediaio-dal-minimal-example/pulls) so others can benefit from it! Also I'd love to see what you built with it, so please open an issue or hit me up on [Twitter](https://twitter.com/johnboiles) and show me what you've made!
