@@ -42,6 +42,8 @@ Also take a look at [Cameo](https://github.com/lvsti/Cameo) by @lvsti. It allows
 
 Before you bundle this code into your software, you should change the class names to something unique! Objective-C doesn't have namespaces and so if you keep the classes named `Stream`, `Device`, `ObjectStore`, `PlugIn` etc your plugin may not work if you use it along with someone else's plugin who also didn't change the names. This can cause [real bugs](https://github.com/johnboiles/obs-mac-virtualcam/issues/232) where your plugin won't work if someone else's plugin is installed. Typically in Objective-C you add a few letters to the front of your classes to make them unique (e.g. `JBStream`, `JBDevice`, `JBObjectStore`, `JBPlugin`).
 
+You must also change the plugin UUID to something unique in the Info.plist. The sample uses `8457B77A-D0304458-B136-8BB5335F4512` which must be changed to a new UUID of your choosing, in both  "Plug-in factory interfaces" and  "Plug-in types" entries.
+
 ## License ⚖️
 
 This software is licensed as MIT. Do what you want with it! But please, if you find ways to improve this software, or you find bugs, please open a [Pull Request](https://github.com/johnboiles/coremediaio-dal-minimal-example/pulls) so others can benefit from it! Also I'd love to see what you built with it, so please open an issue or hit me up on [Twitter](https://twitter.com/johnboiles) and show me what you've made!
